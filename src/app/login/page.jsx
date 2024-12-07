@@ -1,15 +1,20 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
+  const router = useRouter();
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError(null);
+
     try {
-      const response = await fetch('https://bildy-rpmaya.koyeb.app/api/auth/login', {
+      const response = await fetch('https://bildy-rpmaya.koyeb.app/api/user/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -20,42 +25,52 @@ export default function LoginPage() {
       }
 
       const data = await response.json();
-      alert('Inicio de sesión exitoso');
-      localStorage.setItem('jwt', data.token); // Guardar token en localStorage
-      window.location.href = '/dashboard'; // Redirigir al dashboard
+      localStorage.setItem('jwt', data.token);
+      router.push('/dashboard');
     } catch (err) {
       setError(err.message);
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10">
-      <h1 className="text-2xl font-bold mb-4">Iniciar Sesión</h1>
-      {error && <p className="text-red-500">{error}</p>}
-      <div className="mb-4">
-        <label className="block text-sm font-medium">Correo Electrónico</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full border border-gray-300 rounded p-2"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium">Contraseña</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full border border-gray-300 rounded p-2"
-        />
-      </div>
-      <button
-        onClick={handleLogin}
-        className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-      >
-        Iniciar Sesión
-      </button>
+    <div style={{ maxWidth: '400px', margin: 'auto', marginTop: '50px' }}>
+      <h1>Iniciar Sesión</h1>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <form onSubmit={handleLogin}>
+        <div>
+          <label>Email:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
+          />
+        </div>
+        <div>
+          <label>Contraseña:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            style={{ width: '100%', padding: '8px', marginBottom: '20px' }}
+          />
+        </div>
+        <button
+          type="submit"
+          style={{
+            width: '100%',
+            padding: '10px',
+            backgroundColor: 'blue',
+            color: 'white',
+            border: 'none',
+            borderRadius: '5px',
+          }}
+        >
+          Iniciar Sesión
+        </button>
+      </form>
     </div>
   );
 }
