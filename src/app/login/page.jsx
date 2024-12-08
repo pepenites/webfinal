@@ -32,45 +32,36 @@ export default function LoginPage() {
     }
   };
 
+  const handleBack = () => {
+    router.back(); // Volver a la página anterior
+  };
+
   return (
-    <div style={{ maxWidth: '400px', margin: 'auto', marginTop: '50px' }}>
+    <div className="container">
       <h1>Iniciar Sesión</h1>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p className="error">{error}</p>}
       <form onSubmit={handleLogin}>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
-          />
-        </div>
-        <div>
-          <label>Contraseña:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={{ width: '100%', padding: '8px', marginBottom: '20px' }}
-          />
-        </div>
-        <button
-          type="submit"
-          style={{
-            width: '100%',
-            padding: '10px',
-            backgroundColor: 'blue',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-          }}
-        >
-          Iniciar Sesión
-        </button>
+        <label htmlFor="email">Correo Electrónico</label>
+        <input
+          id="email"
+          type="email"
+          placeholder="Correo Electrónico"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <label htmlFor="password">Contraseña</label>
+        <input
+          id="password"
+          type="password"
+          placeholder="Contraseña"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button type="submit">Iniciar Sesión</button>
       </form>
+      <button onClick={handleBack} className="back-button">Volver atrás</button>
     </div>
   );
 }
