@@ -39,6 +39,7 @@ export default function VerificationModal({ onClose }) {
         <form onSubmit={handleVerifyCode}>
           <input
             type="text"
+            name="verificationCode"
             placeholder="Código de Verificación"
             value={verificationCode}
             onChange={(e) => setVerificationCode(e.target.value)}

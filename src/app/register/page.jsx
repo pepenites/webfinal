@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import VerificationModal from '../components/VerificationModal';
+import VerificacionModal from '../components/VerificacionModal';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
@@ -57,7 +57,7 @@ export default function RegisterPage() {
           </button>
         </form>
       </div>
-      {isVerificationModalOpen && <VerificationModal onClose={() => setIsVerificationModalOpen(false)} />}
+      {isVerificationModalOpen && <VerificacionModal onClose={() => setIsVerificationModalOpen(false)} />}
     </div>
   );
 }
