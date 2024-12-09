@@ -2,19 +2,39 @@
 
 import Link from 'next/link';
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="container">
-      <h1>Bienvenido a Gestión de Albaranes</h1>
-      <p className="subtitle">Elige una opción para comenzar</p>
-      <div className="button-container">
-        <Link href="/login">
-          <button className="primary-button">Iniciar Sesión</button>
+    <div className="homepage-container">
+      {/* Barra de navegación superior */}
+      <header className="navbar">
+        <h1 className="navbar-title">Gestión de Albaranes</h1>
+        <Link href="/login" className="navbar-link">
+          Iniciar Sesión
         </Link>
-        <Link href="/register">
-          <button className="secondary-button">Crear Cuenta</button>
-        </Link>
-      </div>
+      </header>
+
+      {/* Contenido principal */}
+      <main className="main-content">
+        <h2>Bienvenido</h2>
+        <p>Selecciona una de las opciones para gestionar tus datos:</p>
+
+        <div className="button-container">
+          <Link href="/clients" className="main-button">
+            Gestión de Clientes
+          </Link>
+          <Link href="/projects" className="main-button">
+            Gestión de Proyectos
+          </Link>
+          <Link href="/deliverynotes" className="main-button">
+            Gestión de Albaranes
+          </Link>
+        </div>
+      </main>
+
+      {/* Pie de página */}
+      <footer className="footer">
+        &copy; {new Date().getFullYear()} Gestión de Albaranes. Todos los derechos reservados.
+      </footer>
     </div>
   );
 }

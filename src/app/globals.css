@@ -1,158 +1,383 @@
-/* Reseteo básico */
+/* Estilos globales */
 body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
-  background-color: #f0f0f5;
+  background-color: #f0f4f8;
   color: #333;
 }
 
-/* Contenedor central */
-.container {
-  max-width: 600px;
-  margin: 50px auto;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+/* Contenedor principal de la página */
+.homepage-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-/* Estilo de títulos */
-h1 {
-  font-size: 2rem;
-  color: #333;
+/* Barra de navegación */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #007bff;
+  padding: 10px 20px;
+  color: #fff;
+}
+
+.navbar-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.navbar-link {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.navbar-link:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Contenido principal */
+.main-content {
+  flex-grow: 1;
   text-align: center;
+  padding: 20px;
+}
+
+.main-content h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.main-content p {
+  font-size: 1rem;
   margin-bottom: 20px;
 }
 
-/* Estilo de formularios */
+/* Contenedor de botones principales */
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Botones principales */
+.main-button {
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.main-button:hover {
+  background-color: #0056b3;
+}
+
+/* Pie de página */
+.footer {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 10px;
+  font-size: 0.9rem;
+}
+
+/* Contenedor principal para centrar el contenido */
+.centered-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f0f4f8;
+}
+
+/* Tarjeta para formularios */
+.card {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Títulos */
+.card h1 {
+  text-align: center;
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Formularios */
 form {
   display: flex;
   flex-direction: column;
 }
 
-label {
-  margin-bottom: 8px;
+form label {
+  margin-bottom: 5px;
   font-weight: bold;
 }
 
-input {
-  padding: 10px;
-  margin-bottom: 20px;
+form input {
+  padding: 12px;
+  margin-bottom: 15px;
   border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-button {
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  border-radius: 6px;
   font-size: 1rem;
 }
 
-button:hover {
+form input:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+}
+
+/* Botones */
+button {
+  padding: 12px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button.primary {
+  background-color: #007bff;
+  color: #fff;
+}
+
+button.primary:hover {
   background-color: #0056b3;
+}
+
+button.secondary {
+  background-color: #28a745;
+  color: #fff;
+}
+
+button.secondary:hover {
+  background-color: #1e7e34;
+}
+
+button.back-button {
+  margin-top: 10px;
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+button.back-button:hover {
+  background-color: #d6d6d6;
 }
 
 /* Mensajes de error */
 .error {
   color: red;
+  text-align: center;
   font-size: 0.9rem;
   margin-bottom: 10px;
+}
+
+/* Texto adicional */
+.additional-text {
   text-align: center;
+  margin-top: 15px;
+  font-size: 0.9rem;
 }
 
-
-/* Botón de volver atrás */
-.back-button {
-  margin-top: 20px;
-  padding: 10px 15px;
-  background-color: #e0e0e0;
-  color: #333;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
+.additional-text a {
+  color: #007bff;
+  text-decoration: none;
 }
 
-.back-button:hover {
-  background-color: #d6d6d6;
+.additional-text a:hover {
+  text-decoration: underline;
 }
-/* Estilos globales */
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f0f4f8;
-  margin: 0;
-  padding: 0;
+
+/* Modal - Fondo */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  z-index: 1000;
 }
 
-/* Contenedor principal */
-.container {
-  text-align: center;
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
+/* Modal - Contenedor */
+.modal {
+  background: #fff;
+  padding: 20px 30px;
+  border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 100%;
   max-width: 400px;
-  width: 90%;
+  position: relative;
 }
 
-/* Título principal */
-h1 {
-  font-size: 2rem;
-  margin-bottom: 20px;
+/* Modal - Título */
+.modal h2 {
+  margin-bottom: 15px;
+  font-size: 1.5rem;
   color: #333;
 }
 
-/* Subtítulo */
-.subtitle {
+/* Inputs y Botones dentro del Modal */
+.modal input {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
   font-size: 1rem;
-  margin-bottom: 30px;
-  color: #666;
 }
 
-/* Botonera */
-.button-container {
-  display: flex;
-  justify-content: space-around;
-  gap: 20px;
-}
-
-/* Botón principal */
-.primary-button {
-  padding: 10px 20px;
+.modal button {
+  padding: 12px;
   font-size: 1rem;
-  background-color: #007bff;
-  color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.primary-button:hover {
-  background-color: #0056b3;
-}
-
-/* Botón secundario */
-.secondary-button {
-  padding: 10px 20px;
-  font-size: 1rem;
   background-color: #28a745;
-  color: white;
+  color: #fff;
+}
+
+.modal button:hover {
+  background-color: #1e7e34;
+}
+
+/* Botón de cierre */
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
   border: none;
-  border-radius: 8px;
+  font-size: 1.5rem;
   cursor: pointer;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.close-button:hover {
+  color: #ff0000;
+}
+
+
+/* Estilo específico para la barra lateral en la sección de clientes */
+.sidebar h2 {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  color: #007bff;
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  color: #007bff;
+  padding: 8px 10px;
+  border-radius: 4px;
+  display: block;
   transition: background-color 0.3s ease;
 }
 
-.secondary-button:hover {
-  background-color: #1e7e34;
+.sidebar ul li a:hover {
+  background-color: #e9ecef;
+}
+
+/* Estilo específico para el contenido principal en clientes */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+  border-radius: 8px;
+}
+
+.main-content h1 {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.main-content p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+/* Lista de clientes en la sección */
+.client-list {
+  list-style: none;
+  padding: 0;
+}
+
+.client-list li {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.client-list li:hover {
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Barra lateral específica para clientes */
+.sidebar {
+  width: 250px;
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-right: 1px solid #ddd;
+  height: 100vh; /* Asegura que ocupe toda la altura */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Agrega una sombra para destacar */
+}
+
+.sidebar h2 {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  color: #007bff;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin-bottom: 10px;
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  color: #007bff;
+  padding: 8px 10px;
+  border-radius: 4px;
+  display: block;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar ul li a:hover {
+  background-color: #e9ecef;
+  color: #0056b3;
 }

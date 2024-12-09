@@ -17,6 +17,10 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
+    "baseUrl": "./", // Configuración para alias
+    "paths": {
+      "@/*": ["src/*"] // Alias para `@`
+    },
     "plugins": [
       {
         "name": "next"
