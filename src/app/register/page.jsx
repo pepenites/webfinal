@@ -1,63 +1,57 @@
 'use client';
-
 import React, { useState } from 'react';
-import VerificacionModal from '../components/VerificacionModal';
+import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
-  const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
+  const [name, setName] = useState('');
+  const [error, setError] = useState('');
+  const router = useRouter();
 
-  const handleRegister = async () => {
+  const handleRegister = async (e) => {
+    e.preventDefault();
     try {
-      const response = await fetch('https://bildy-rpmaya.koyeb.app/api/user/register', {
+      const response = await fetch('/api/user/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, name }),
       });
-
-      if (!response.ok) {
-        const errorData = await response.text();
-        throw new Error(errorData || 'Error al registrar la cuenta');
-      }
-
-      alert('Registro exitoso. Verifica tu correo para completar el registro.');
-      setIsVerificationModalOpen(true);
+      if (!response.ok) throw new Error('Error al registrar el usuario');
+      router.push('/login'); // Redirigir al inicio de sesión
     } catch (err) {
-      setError(err.message);
+      setError('Error al registrar: ' + err.message);
     }
   };
 
   return (
     <div className="centered-container">
-      <div className="card">
-        <h1>Crear Cuenta</h1>
+      <form className="card" onSubmit={handleRegister}>
+        <h1>Registro</h1>
         {error && <p className="error">{error}</p>}
-        <form onSubmit={(e) => e.preventDefault()}>
-          <label>Correo Electrónico</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Introduce tu correo"
-          />
-          <label>Contraseña</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Introduce tu contraseña"
-          />
-          <button className="primary" onClick={handleRegister}>
-            Registrar
-          </button>
-          <button className="back-button" onClick={() => window.history.back()}>
-            Volver atrás
-          </button>
-        </form>
-      </div>
-      {isVerificationModalOpen && <VerificacionModal onClose={() => setIsVerificationModalOpen(false)} />}
+        <label>Nombre:</label>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+        <label>Email:</label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <label>Contraseña:</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button type="submit" className="button-primary">Registrar</button>
+      </form>
     </div>
   );
 }

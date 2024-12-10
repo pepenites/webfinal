@@ -15,8 +15,8 @@ export default function HomePage() {
 
       {/* Contenido principal */}
       <main className="main-content">
-        <h2>Bienvenido</h2>
-        <p>Selecciona una de las opciones para gestionar tus datos:</p>
+        <h2 className="welcome-title">Bienvenido</h2>
+        <p className="welcome-text">Selecciona una de las opciones para gestionar tus datos:</p>
 
         <div className="button-container">
           <Link href="/clients" className="main-button">
@@ -33,7 +33,7 @@ export default function HomePage() {
 
       {/* Pie de página */}
       <footer className="footer">
-        &copy; {new Date().getFullYear()} Gestión de Albaranes. Todos los derechos reservados.
+        &copy; {new Date().getFullYear()} Pepecorporation. Todos los derechos reservados.
       </footer>
     </div>
   );

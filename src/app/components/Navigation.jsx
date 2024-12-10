@@ -1,18 +1,33 @@
 'use client';
 
 import Link from 'next/link';
+import { useUser } from './UserContext';
 
 export default function Navigation() {
+  const { user, logout } = useUser();
+
   return (
-    <nav className="bg-blue-600 p-4 text-white flex justify-between">
-      <div>
-        <Link href="/" className="font-bold text-xl">Inicio</Link>
+    <nav className="navigation">
+      <div className="nav-left">
+        {user ? (
+          <>
+            <span className="welcome-text">Bienvenido, {user.name}</span>
+            <button className="logout-button" onClick={logout}>
+              Cerrar Sesión
+            </button>
+          </>
+        ) : (
+          <Link href="/login" className="login-button">
+            Iniciar Sesión
+          </Link>
+        )}
       </div>
-      <div className="space-x-4">
-        <Link href="/clients">Clientes</Link>
-        <Link href="/projects">Proyectos</Link>
-        <Link href="/deliverynotes">Albaranes</Link>
-      </div>
+      <ul className="nav-links">
+        <li><Link href="/">Inicio</Link></li>
+        <li><Link href="/clients">Clientes</Link></li>
+        <li><Link href="/projects">Proyectos</Link></li>
+        <li><Link href="/deliverynotes">Albaranes</Link></li>
+      </ul>
     </nav>
   );
 }

@@ -1,9 +1,22 @@
 'use client';
 
+import React from 'react';
+import { useUser } from './UserContext';
+
 export default function Header() {
+  const { user, logout } = useUser();
+
   return (
-    <header className="bg-blue-500 text-white p-4">
-      <h1 className="text-center text-2xl font-bold">Gestión de Albaranes</h1>
+    <header className="header">
+      <h1>Gestión de Albaranes</h1>
+      {user ? (
+        <div className="user-info">
+          <span>Bienvenido, {user.name}</span>
+          <button onClick={logout}>Cerrar Sesión</button>
+        </div>
+      ) : (
+        <a href="/login">Iniciar Sesión</a>
+      )}
     </header>
   );
 }
