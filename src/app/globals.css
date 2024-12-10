@@ -553,3 +553,175 @@ button:hover {
 .navbar-right a:hover {
   background-color: rgba(255, 255, 255, 0.2);
 }
+.register-container,
+.login-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.register-container h1,
+.login-container h1 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+
+.register-container input,
+.login-container input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.register-container button,
+.login-container button {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.register-container button:hover,
+.login-container button:hover {
+  background-color: #0056b3;
+}
+
+.register-container .error,
+.login-container .error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+
+.register-container p a,
+.login-container p a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.register-container p a:hover,
+.login-container p a:hover {
+  text-decoration: underline;
+}
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
+}
+
+h1, h2 {
+  text-align: center;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+.error {
+  color: red;
+  text-align: center;
+}
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.new-client-form {
+  margin-bottom: 20px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.clients-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.clients-list li {
+  background: #f9f9f9;
+  padding: 10px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.clients-list li p {
+  margin: 0;
+}
+
+.button-container {
+  margin-top: 20px;
+}
+
+.button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.button.primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.button.primary:hover {
+  background-color: #0056b3;
+}
+
+.button.secondary {
+  background-color: #28a745;
+  color: white;
+}
+
+.button.secondary:hover {
+  background-color: #1e7e34;
+}
+
+.error {
+  color: red;
+  margin: 10px 0;
+}

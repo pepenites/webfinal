@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 const UserContext = createContext();
 
@@ -13,7 +13,7 @@ export default function UserProvider({ children }) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Solo accede a localStorage en el cliente
+    // Asegúrate de que estás en el cliente antes de acceder a localStorage
     if (typeof window !== 'undefined') {
       const storedToken = localStorage.getItem('jwt') || '';
       setToken(storedToken);
@@ -21,18 +21,22 @@ export default function UserProvider({ children }) {
   }, []);
 
   const login = (newToken) => {
-    setToken(newToken);
-    localStorage.setItem('jwt', newToken);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('jwt', newToken);
+      setToken(newToken);
+    }
   };
 
   const logout = () => {
-    setToken('');
-    setUser(null);
-    localStorage.removeItem('jwt');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('jwt');
+      setToken('');
+      setUser(null);
+    }
   };
 
   return (
-    <UserContext.Provider value={{ token, user, login, logout, setUser }}>
+    <UserContext.Provider value={{ token, user, setUser, login, logout }}>
       {children}
     </UserContext.Provider>
   );

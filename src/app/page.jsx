@@ -5,13 +5,6 @@ import Link from 'next/link';
 export default function HomePage() {
   return (
     <div className="homepage-container">
-      {/* Barra de navegación superior */}
-      <header className="navbar">
-        <h1 className="navbar-title">Gestión de Albaranes</h1>
-        <Link href="/login" className="navbar-link">
-          Iniciar Sesión
-        </Link>
-      </header>
 
       {/* Contenido principal */}
       <main className="main-content">

@@ -1,87 +1,96 @@
 'use client';
-import React, { useState, useEffect } from 'react';
 
-export default function CreateProject() {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [clientId, setClientId] = useState('');
+import { useState, useEffect } from 'react';
+
+export default function ProjectsPage() {
+  const [projects, setProjects] = useState([]);
   const [clients, setClients] = useState([]);
+  const [newProject, setNewProject] = useState({ name: '', clientId: '' });
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
 
   useEffect(() => {
-    const fetchClients = async () => {
+    const fetchClientsAndProjects = async () => {
       try {
         const token = localStorage.getItem('jwt');
-        const response = await fetch('/api/client', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (!response.ok) throw new Error('Error al cargar clientes');
-        const data = await response.json();
-        setClients(data);
+        const [clientsRes, projectsRes] = await Promise.all([
+          fetch('https://bildy-rpmaya.koyeb.app/api/client', {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          fetch('https://bildy-rpmaya.koyeb.app/api/project', {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
+
+        if (!clientsRes.ok || !projectsRes.ok)
+          throw new Error('Error al obtener datos.');
+        const [clientsData, projectsData] = await Promise.all([
+          clientsRes.json(),
+          projectsRes.json(),
+        ]);
+
+        setClients(clientsData);
+        setProjects(projectsData);
       } catch (err) {
-        console.error(err);
+        setError(err.message);
       }
     };
 
-    fetchClients();
+    fetchClientsAndProjects();
   }, []);
 
-  const handleCreateProject = async (e) => {
-    e.preventDefault();
+  const handleAddProject = async () => {
     try {
       const token = localStorage.getItem('jwt');
-      const response = await fetch('/api/project', {
+      const response = await fetch('https://bildy-rpmaya.koyeb.app/api/project', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ name, description, clientId }),
+        body: JSON.stringify(newProject),
       });
-      if (!response.ok) throw new Error('Error al crear el proyecto');
-      setSuccess('Proyecto creado con éxito');
-      setError('');
+
+      if (!response.ok) throw new Error('Error al agregar el proyecto.');
+      const addedProject = await response.json();
+      setProjects([...projects, addedProject]);
+      setNewProject({ name: '', clientId: '' });
     } catch (err) {
-      setError('Error: ' + err.message);
-      setSuccess('');
+      setError(err.message);
     }
   };
 
   return (
-    <div className="centered-container">
-      <form className="card" onSubmit={handleCreateProject}>
-        <h1>Crear Proyecto</h1>
-        {error && <p className="error">{error}</p>}
-        {success && <p className="success">{success}</p>}
-        <label>Nombre del Proyecto:</label>
+    <div className="container">
+      <h1>Gestión de Proyectos</h1>
+      <div>
+        <h2>Añadir Proyecto</h2>
         <input
           type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
+          placeholder="Nombre del Proyecto"
+          value={newProject.name}
+          onChange={(e) => setNewProject({ ...newProject, name: e.target.value })}
         />
-        <label>Descripción:</label>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-        ></textarea>
-        <label>Cliente:</label>
         <select
-          value={clientId}
-          onChange={(e) => setClientId(e.target.value)}
-          required
+          value={newProject.clientId}
+          onChange={(e) => setNewProject({ ...newProject, clientId: e.target.value })}
         >
-          <option value="">Seleccionar Cliente</option>
+          <option value="">Selecciona un Cliente</option>
           {clients.map((client) => (
             <option key={client.id} value={client.id}>
               {client.name}
             </option>
           ))}
         </select>
-        <button type="submit" className="button-primary">Crear Proyecto</button>
-      </form>
+        <button className="button" onClick={handleAddProject}>
+          Guardar Proyecto
+        </button>
+      </div>
+      {error && <p className="error">{error}</p>}
+      <ul>
+        {projects.map((project) => (
+          <li key={project.id}>{project.name}</li>
+        ))}
+      </ul>
     </div>
   );
 }
