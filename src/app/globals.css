@@ -435,3 +435,121 @@ body {
   padding: 10px;
   font-size: 0.9rem;
 }
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+  overflow-x: hidden; /* Evitar scroll horizontal */
+}
+
+.container {
+  max-width: 1200px; /* Ancho máximo para páginas */
+  margin: 0 auto; /* Centramos el contenido */
+  padding: 20px;
+}
+
+h1, h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Ajustar botones */
+button, .button-container a {
+  font-size: 1rem;
+  padding: 10px 20px;
+}
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.error {
+  color: red;
+}
+/* Barra de navegación */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #007bff;
+  padding: 10px 20px;
+  color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Contenedor de los enlaces (Inicio, Clientes, etc.) */
+.navbar-left {
+  display: flex;
+  gap: 15px;
+}
+
+/* Enlace dentro de la barra de navegación */
+.navbar-link {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.navbar-link:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Botón de iniciar sesión */
+.navbar-right {
+  margin-left: auto;
+}
+
+.navbar-right a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.navbar-right a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
