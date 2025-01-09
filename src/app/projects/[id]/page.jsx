@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import Sidebar from '../../components/Sidebar';
 import Header from '../../components/Header';
 
-export default function ProjectDetails({ params }) {
-  const { id } = params;
+
+export default function ProjectDetails({ params: { id } }) {
   const router = useRouter();
   const [project, setProject] = useState(null);
   const [error, setError] = useState(null);
@@ -14,7 +14,12 @@ export default function ProjectDetails({ params }) {
   useEffect(() => {
     const fetchProject = async () => {
       try {
-        const response = await fetch(`/api/projects/${id}`); // Cambia este endpoint si es necesario
+        const token = localStorage.getItem('jwt');
+        const response = await fetch(`/api/projects/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         if (!response.ok) {
           throw new Error('Error al obtener el proyecto');
         }
