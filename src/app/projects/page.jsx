@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 
+
 export default function ProjectsPage() {
   const [projects, setProjects] = useState([]);
   const [clients, setClients] = useState([]);
@@ -22,6 +23,8 @@ export default function ProjectsPage() {
   const [editingProject, setEditingProject] = useState(null);
   const [searchId, setSearchId] = useState(""); // Para búsqueda por ID
 
+
+  
   useEffect(() => {
     const fetchClientsAndProjects = async () => {
       try {
@@ -107,7 +110,7 @@ export default function ProjectsPage() {
   };
 
   const handleEditProject = async () => {
-    // Verificar si editingProject es válido
+    // Validar que editingProject y su ID sean válidos
     if (!editingProject || !editingProject._id) {
       console.error("No hay proyecto válido seleccionado para editar.");
       return;
@@ -116,7 +119,7 @@ export default function ProjectsPage() {
     try {
       const token = localStorage.getItem("jwt");
   
-      // Verificar si el token está disponible
+      // Verificar que el token esté disponible
       if (!token) {
         console.error("No se encontró el token de autenticación.");
         return;
@@ -126,7 +129,7 @@ export default function ProjectsPage() {
       myHeaders.append("Content-Type", "application/json");
       myHeaders.append("Authorization", `Bearer ${token}`);
   
-      // Crear el cuerpo de la solicitud
+      // Crear el cuerpo de la solicitud con validaciones para address
       const raw = JSON.stringify({
         name: editingProject.name || "",
         code: editingProject.code || "",
@@ -150,15 +153,15 @@ export default function ProjectsPage() {
         redirect: "follow",
       };
   
-      console.log("Enviando datos a la API:", raw);
+      console.log("Enviando datos para editar el proyecto:", raw);
   
-      // Hacer la solicitud a la API
+      // Realizar la solicitud a la API
       const response = await fetch(
         `https://bildy-rpmaya.koyeb.app/api/project/${editingProject._id}`,
         requestOptions
       );
   
-      // Manejar errores HTTP
+      // Manejar errores de respuesta
       if (!response.ok) {
         const errorDetails = await response.text();
         throw new Error(
@@ -166,11 +169,10 @@ export default function ProjectsPage() {
         );
       }
   
-      // Procesar la respuesta de la API
       const updatedProject = await response.json();
       console.log("Proyecto actualizado exitosamente:", updatedProject);
   
-      // Actualizar el estado del frontend con el proyecto editado
+      // Actualizar el estado de los proyectos en el frontend
       setProjects(
         projects.map((project) =>
           project._id === updatedProject._id ? updatedProject : project
@@ -179,15 +181,14 @@ export default function ProjectsPage() {
   
       setEditingProject(null); // Salir del modo de edición
     } catch (error) {
-      // Capturar y mostrar cualquier error
       console.error("Error al editar proyecto:", error);
     }
   };
   
   
-  const handleDeleteProject = async (projectId) => {
-    console.log("ID del proyecto recibido para eliminar:", projectId);
   
+  
+  const handleDeleteProject = async (projectId) => {
     if (!projectId) {
       console.error("No se proporcionó un ID de proyecto válido.");
       return;
@@ -197,40 +198,40 @@ export default function ProjectsPage() {
       const token = localStorage.getItem("jwt");
   
       if (!token) {
-        console.error("No se encontró el token de autenticación.");
+        alert("No se encontró el token de autenticación.");
         return;
       }
   
       const myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${token}`);
   
-      const requestOptions = {
-        method: "DELETE",
-        headers: myHeaders,
-        redirect: "follow",
-      };
-  
-      console.log(`Eliminando proyecto con ID: ${projectId}`);
-  
       const response = await fetch(
         `https://bildy-rpmaya.koyeb.app/api/project/${projectId}`,
-        requestOptions
+        {
+          method: "DELETE",
+          headers: myHeaders,
+        }
       );
   
       if (!response.ok) {
-        const errorDetails = await response.text();
         throw new Error(
-          `Error al eliminar el proyecto: ${response.status} - ${errorDetails}`
+          `Error al eliminar el proyecto: ${response.status} - ${response.statusText}`
         );
       }
   
-      console.log("Proyecto eliminado exitosamente.");
+      // Filtrar el proyecto eliminado de la lista
+      setProjects((prevProjects) =>
+        prevProjects.filter((project) => project._id !== projectId)
+      );
   
-      setProjects(projects.filter((project) => project._id !== projectId));
+      alert("Proyecto eliminado correctamente.");
     } catch (error) {
-      console.error("Error al eliminar proyecto:", error);
+      console.error("Error al eliminar el proyecto:", error);
+      alert("Hubo un error al intentar eliminar el proyecto.");
     }
   };
+  
+  
   
   
   
