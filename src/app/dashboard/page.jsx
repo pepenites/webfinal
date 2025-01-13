@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function DashboardPage() {
   const [user, setUser] = useState(null);
@@ -33,11 +34,11 @@ export default function DashboardPage() {
     <div>
       <h1>Bienvenido, {user.name}</h1>
       <nav>
-        <a href="/clients">Clientes</a>
+        <Link href="/clients">Clientes</Link>
         <br />
-        <a href="/projects">Proyectos</a>
+        <Link href="/projects">Proyectos</Link>
         <br />
-        <a href="/deliverynotes">Albaranes</a>
+        <Link href="/deliverynotes">Albaranes</Link>
       </nav>
     </div>
   );

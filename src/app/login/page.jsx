@@ -2,15 +2,19 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useUser } from '../components/UserContext'; // Importa el contexto del usuario
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
+  const { login } = useUser(); // Función de login desde UserContext
 
   const handleLogin = async () => {
     try {
+      setError(''); // Limpiar errores anteriores
+
       // Configuración de headers
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
@@ -33,15 +37,20 @@ export default function LoginPage() {
       const response = await fetch("https://bildy-rpmaya.koyeb.app/api/user/login", requestOptions);
 
       if (!response.ok) {
-        throw new Error('Credenciales incorrectas');
+        const errorDetail = await response.json();
+        throw new Error(errorDetail.message || 'Credenciales incorrectas');
       }
 
       const result = await response.json();
-      localStorage.setItem('jwt', result.token);
+
+      // Guardar token y actualizar contexto
+      login(result.token);
+
+      // Redirigir al inicio
       router.push('/');
     } catch (err) {
       console.error('Error al iniciar sesión:', err);
-      setError('Credenciales incorrectas. Por favor, inténtalo de nuevo.');
+      setError(err.message || 'Error desconocido al iniciar sesión.');
     }
   };
 

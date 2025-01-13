@@ -1,61 +1,74 @@
 'use client';
 
 import { useState } from 'react';
+import VerificationModal from '../components/VerificationModal'; // Importa el componente para el modal
 import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
-  const [email, setEmail] = useState(''); // Correo electrónico
-  const [password, setPassword] = useState(''); // Contraseña
-  const [name, setName] = useState(''); // Nombre completo
-  const [error, setError] = useState(''); // Mensaje de error
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [verificationToken, setVerificationToken] = useState('');
   const router = useRouter();
 
-  const handleRegister = async () => {
-    try {
-      // Configuración de headers
-      const myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
+  const handleRegister = () => {
+    setError(''); // Limpiar errores previos
 
-      // Datos dinámicos del formulario
-      const raw = JSON.stringify({
-        email: email,
-        password: password,
-        name: name,
-      });
-
-      // Opciones de la solicitud
-      const requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: raw,
-        redirect: "follow",
-      };
-
-      // Comunicación con la API
-      const response = await fetch("https://bildy-rpmaya.koyeb.app/api/user/register", requestOptions);
-
-      if (!response.ok) {
-        throw new Error('Error al registrar el usuario');
-      }
-
-      // Si el registro es exitoso, redirigir a la página de inicio de sesión
-      router.push('/login');
-    } catch (err) {
-      console.error('Error al registrar el usuario:', err);
-      setError('No se pudo registrar. Por favor, inténtalo de nuevo.');
+    // Validar campos
+    if (!email || !password) {
+      setError('Por favor, completa todos los campos.');
+      return;
     }
+
+    // Configuración de headers
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+
+    // Datos enviados
+    const raw = JSON.stringify({ email, password });
+
+    const requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    };
+
+    console.log('Datos enviados:', { email, password });
+
+    // Comunicación con la API
+    fetch('https://bildy-rpmaya.koyeb.app/api/user/register', requestOptions)
+      .then((response) => {
+        if (!response.ok) {
+          return response.text().then((text) => {
+            throw new Error(text || 'Error al registrar usuario.');
+          });
+        }
+        return response.json(); // Intentamos parsear la respuesta como JSON
+      })
+      .then((result) => {
+        console.log('Registro exitoso:', result);
+
+        if (!result.token) {
+          throw new Error('No se recibió un token de verificación.');
+        }
+
+        // Guardar token de verificación
+        setVerificationToken(result.token);
+
+        // Mostrar modal de verificación
+        setIsModalOpen(true);
+      })
+      .catch((err) => {
+        console.error('Error al registrar el usuario:', err);
+        setError(err.message || 'No se pudo registrar. Por favor, inténtalo de nuevo.');
+      });
   };
 
   return (
     <div className="container">
       <h1>Crear Cuenta</h1>
-      <input
-        type="text"
-        placeholder="Nombre completo"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="input-field"
-      />
       <input
         type="email"
         placeholder="Correo electrónico"
@@ -74,6 +87,20 @@ export default function RegisterPage() {
         Registrarse
       </button>
       {error && <p className="error">{error}</p>}
+      <p>
+        ¿Ya tienes cuenta? <a href="/login">Iniciar sesión</a>
+      </p>
+
+      {isModalOpen && (
+        <VerificationModal
+          verificationToken={verificationToken}
+          email={email}
+          onClose={() => {
+            setIsModalOpen(false);
+            router.push('/login'); // Redirigir al login
+          }}
+        />
+      )}
     </div>
   );
 }
