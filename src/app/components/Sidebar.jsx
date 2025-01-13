@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useUser } from '../context/UserContext';
+import { useUser } from './UserContext'; // Asegúrate de que la ruta sea correcta
 
 export default function Sidebar() {
   const { user, logout } = useUser();

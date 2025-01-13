@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Sidebar from '../../components/Sidebar';
 import Header from '../../components/Header';
 
-
 export default function ProjectDetails({ params: { id } }) {
   const router = useRouter();
   const [project, setProject] = useState(null);
@@ -14,15 +13,29 @@ export default function ProjectDetails({ params: { id } }) {
   useEffect(() => {
     const fetchProject = async () => {
       try {
+        // Configuración de headers
+        const myHeaders = new Headers();
         const token = localStorage.getItem('jwt');
-        const response = await fetch(`/api/projects/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        if (token) {
+          myHeaders.append('Authorization', `Bearer ${token}`);
+        }
+
+        const requestOptions = {
+          method: 'GET',
+          headers: myHeaders,
+          redirect: 'follow',
+        };
+
+        // Comunicación con la API
+        const response = await fetch(
+          `https://bildy-rpmaya.koyeb.app/api/project/${id}`,
+          requestOptions
+        );
+
         if (!response.ok) {
           throw new Error('Error al obtener el proyecto');
         }
+
         const data = await response.json();
         setProject(data);
       } catch (err) {

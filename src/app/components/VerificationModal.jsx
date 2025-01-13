@@ -15,14 +15,24 @@ export default function VerificationModal({ verificationToken, email, onClose })
         throw new Error('Token de verificación no encontrado. Intente iniciar sesión nuevamente.');
       }
 
-      const response = await fetch('https://bildy-rpmaya.koyeb.app/api/user/validation', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${verificationToken}`,
-        },
-        body: JSON.stringify({ code }),
-      });
+      // Configuración de headers
+      const myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${verificationToken}`);
+      myHeaders.append("Content-Type", "application/json");
+
+      // Datos dinámicos
+      const raw = JSON.stringify({ code });
+
+      // Opciones de la solicitud
+      const requestOptions = {
+        method: "PUT",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      // Comunicación con la API
+      const response = await fetch("https://bildy-rpmaya.koyeb.app/api/user/validation", requestOptions);
 
       if (!response.ok) {
         const errorData = await response.json();

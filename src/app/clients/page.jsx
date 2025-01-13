@@ -3,31 +3,34 @@
 import { useState, useEffect } from 'react';
 
 export default function ClientsPage() {
-  const [clients, setClients] = useState([]);
+  const [clients, setClients] = useState([]); // Lista de clientes
   const [newClient, setNewClient] = useState({
     name: '',
     cif: '',
     address: { street: '', number: '', postal: '', city: '', province: '' },
   });
-  const [error, setError] = useState('');
+  const [searchId, setSearchId] = useState(''); // ID para buscar cliente
+  const [searchedClient, setSearchedClient] = useState(null); // Cliente encontrado por ID
   const [editingClient, setEditingClient] = useState(null); // Cliente en edición
+  const [error, setError] = useState('');
 
+  // Obtener la lista de clientes al cargar la página
   useEffect(() => {
     const fetchClients = async () => {
       try {
         const myHeaders = new Headers();
         const token = localStorage.getItem('jwt');
         if (token) {
-          myHeaders.append("Authorization", `Bearer ${token}`);
+          myHeaders.append('Authorization', `Bearer ${token}`);
         }
 
         const requestOptions = {
-          method: "GET",
+          method: 'GET',
           headers: myHeaders,
-          redirect: "follow",
+          redirect: 'follow',
         };
 
-        const response = await fetch("https://bildy-rpmaya.koyeb.app/api/client", requestOptions);
+        const response = await fetch('https://bildy-rpmaya.koyeb.app/api/client', requestOptions);
 
         if (!response.ok) {
           throw new Error('Error al obtener los clientes');
@@ -44,45 +47,245 @@ export default function ClientsPage() {
     fetchClients();
   }, []);
 
-  // Función para editar un cliente
+  // Crear un nuevo cliente
+  const handleAddClient = async () => {
+    try {
+      const myHeaders = new Headers();
+      myHeaders.append('Content-Type', 'application/json');
+      const token = localStorage.getItem('jwt');
+      if (token) {
+        myHeaders.append('Authorization', `Bearer ${token}`);
+      }
+
+      const raw = JSON.stringify(newClient);
+
+      const requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow',
+      };
+
+      const response = await fetch('https://bildy-rpmaya.koyeb.app/api/client', requestOptions);
+
+      if (!response.ok) {
+        throw new Error('Error al crear el cliente');
+      }
+
+      const createdClient = await response.json();
+      setClients([...clients, createdClient]);
+      setNewClient({
+        name: '',
+        cif: '',
+        address: { street: '', number: '', postal: '', city: '', province: '' },
+      });
+    } catch (err) {
+      console.error('Error al crear el cliente:', err);
+      setError('No se pudo crear el cliente.');
+    }
+  };
+
+  // Buscar cliente por ID
+  const handleSearchClient = async () => {
+    try {
+      const myHeaders = new Headers();
+      const token = localStorage.getItem('jwt');
+      if (token) {
+        myHeaders.append('Authorization', `Bearer ${token}`);
+      }
+
+      const requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+      };
+
+      const response = await fetch(`https://bildy-rpmaya.koyeb.app/api/client/${searchId}`, requestOptions);
+
+      if (!response.ok) {
+        throw new Error('Error al buscar el cliente');
+      }
+
+      const data = await response.json();
+      setSearchedClient(data);
+      setError('');
+    } catch (err) {
+      console.error('Error al buscar el cliente:', err);
+      setError('No se pudo encontrar el cliente.');
+    }
+  };
+
+  // Editar un cliente existente
   const handleEditClient = async () => {
     try {
       const myHeaders = new Headers();
-      myHeaders.append("Authorization", `Bearer ${localStorage.getItem('jwt')}`);
-      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append('Content-Type', 'application/json');
+      const token = localStorage.getItem('jwt');
+      if (token) {
+        myHeaders.append('Authorization', `Bearer ${token}`);
+      }
 
       const raw = JSON.stringify(editingClient);
 
       const requestOptions = {
-        method: "PUT",
+        method: 'PUT',
         headers: myHeaders,
         body: raw,
-        redirect: "follow",
+        redirect: 'follow',
       };
 
-      const response = await fetch(`https://bildy-rpmaya.koyeb.app/api/client/${editingClient.id}`, requestOptions);
+      const response = await fetch(
+        `https://bildy-rpmaya.koyeb.app/api/client/${editingClient.id}`,
+        requestOptions
+      );
 
       if (!response.ok) {
-        throw new Error("Error al editar el cliente");
+        throw new Error('Error al editar el cliente');
       }
 
       const updatedClient = await response.json();
-      setClients(clients.map(client => client.id === updatedClient.id ? updatedClient : client)); // Actualizar estado
-      setEditingClient(null); // Limpiar cliente en edición
-    } catch (error) {
-      console.error("Error al editar el cliente:", error);
-      setError("No se pudo editar el cliente.");
+      setClients(clients.map(client => client.id === updatedClient.id ? updatedClient : client));
+      setEditingClient(null);
+    } catch (err) {
+      console.error('Error al editar el cliente:', err);
+      setError('No se pudo editar el cliente.');
+    }
+  };
+
+  // Eliminar un cliente
+  const handleDeleteClient = async (clientId) => {
+    try {
+      const myHeaders = new Headers();
+      const token = localStorage.getItem('jwt');
+      if (token) {
+        myHeaders.append('Authorization', `Bearer ${token}`);
+      }
+
+      const requestOptions = {
+        method: 'DELETE',
+        headers: myHeaders,
+        redirect: 'follow',
+      };
+
+      const response = await fetch(
+        `https://bildy-rpmaya.koyeb.app/api/client/${clientId}`,
+        requestOptions
+      );
+
+      if (!response.ok) {
+        throw new Error('Error al eliminar el cliente');
+      }
+
+      setClients(clients.filter(client => client.id !== clientId));
+    } catch (err) {
+      console.error('Error al eliminar el cliente:', err);
+      setError('No se pudo eliminar el cliente.');
     }
   };
 
   // Configurar cliente en edición
   const startEditingClient = (client) => {
-    setEditingClient({ ...client }); // Copiar cliente actual
+    setEditingClient({ ...client });
   };
 
   return (
     <div className="container">
       <h1>Gestión de Clientes</h1>
+
+      {/* Formulario para buscar cliente */}
+      <div className="search-client-form">
+        <h2>Buscar Cliente</h2>
+        <input
+          type="text"
+          placeholder="ID del Cliente"
+          value={searchId}
+          onChange={(e) => setSearchId(e.target.value)}
+          className="input-field"
+        />
+        <button onClick={handleSearchClient} className="button primary">
+          Buscar Cliente
+        </button>
+      </div>
+
+      {/* Mostrar cliente encontrado */}
+      {searchedClient && (
+        <div className="searched-client">
+          <h2>Cliente Encontrado:</h2>
+          <p><strong>Nombre:</strong> {searchedClient.name}</p>
+          <p><strong>CIF:</strong> {searchedClient.cif}</p>
+          <p>
+            <strong>Dirección:</strong> {searchedClient.address.street}, {searchedClient.address.number},{' '}
+            {searchedClient.address.city}, {searchedClient.address.province} ({searchedClient.address.postal})
+          </p>
+        </div>
+      )}
+
+      {/* Formulario para crear cliente */}
+      <div className="new-client-form">
+        <h2>Crear Cliente</h2>
+        <input
+          type="text"
+          placeholder="Nombre"
+          value={newClient.name}
+          onChange={(e) => setNewClient({ ...newClient, name: e.target.value })}
+          className="input-field"
+        />
+        <input
+          type="text"
+          placeholder="CIF"
+          value={newClient.cif}
+          onChange={(e) => setNewClient({ ...newClient, cif: e.target.value })}
+          className="input-field"
+        />
+        <input
+          type="text"
+          placeholder="Calle"
+          value={newClient.address.street}
+          onChange={(e) =>
+            setNewClient({ ...newClient, address: { ...newClient.address, street: e.target.value } })
+          }
+          className="input-field"
+        />
+        <input
+          type="text"
+          placeholder="Número"
+          value={newClient.address.number}
+          onChange={(e) =>
+            setNewClient({ ...newClient, address: { ...newClient.address, number: e.target.value } })
+          }
+          className="input-field"
+        />
+        <input
+          type="text"
+          placeholder="Código Postal"
+          value={newClient.address.postal}
+          onChange={(e) =>
+            setNewClient({ ...newClient, address: { ...newClient.address, postal: e.target.value } })
+          }
+          className="input-field"
+        />
+        <input
+          type="text"
+          placeholder="Ciudad"
+          value={newClient.address.city}
+          onChange={(e) =>
+            setNewClient({ ...newClient, address: { ...newClient.address, city: e.target.value } })
+          }
+          className="input-field"
+        />
+        <input
+          type="text"
+          placeholder="Provincia"
+          value={newClient.address.province}
+          onChange={(e) =>
+            setNewClient({ ...newClient, address: { ...newClient.address, province: e.target.value } })
+          }
+          className="input-field"
+        />
+        <button onClick={handleAddClient} className="button primary">
+          Crear Cliente
+        </button>
+      </div>
 
       {/* Formulario para editar cliente */}
       {editingClient && (
@@ -168,6 +371,9 @@ export default function ClientsPage() {
             </p>
             <button onClick={() => startEditingClient(client)} className="button primary">
               Editar Cliente
+            </button>
+            <button onClick={() => handleDeleteClient(client.id)} className="button danger">
+              Eliminar Cliente
             </button>
           </li>
         ))}

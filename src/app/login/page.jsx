@@ -11,18 +11,33 @@ export default function LoginPage() {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('/api/user/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+      // Configuración de headers
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      // Datos dinámicos del formulario
+      const raw = JSON.stringify({
+        email: email,
+        password: password,
       });
+
+      // Opciones de la solicitud
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      // Comunicación con la API
+      const response = await fetch("https://bildy-rpmaya.koyeb.app/api/user/login", requestOptions);
 
       if (!response.ok) {
         throw new Error('Credenciales incorrectas');
       }
 
-      const data = await response.json();
-      localStorage.setItem('jwt', data.token);
+      const result = await response.json();
+      localStorage.setItem('jwt', result.token);
       router.push('/');
     } catch (err) {
       console.error('Error al iniciar sesión:', err);
