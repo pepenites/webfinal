@@ -1,37 +1,39 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true, // Permite incluir archivos .js en el proyecto
-    "skipLibCheck": true, // Omite la verificación de tipos en los archivos de declaración
-    "strict": true, // Activa el modo estricto de TypeScript
-    "noEmit": true, // No genera archivos de salida
-    "incremental": true, // Habilita compilación incremental
-    "module": "esnext", // Módulos en formato ESNext
-    "esModuleInterop": true, // Interoperabilidad con CommonJS
-    "moduleResolution": "node", // Resolución de módulos estilo Node.js
-    "resolveJsonModule": true, // Permite importar archivos JSON
-    "isolatedModules": true, // Asegura que cada archivo sea tratado como un módulo independiente
-    "jsx": "preserve", // Conserva JSX, compatible con React
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "noEmit": true,
+    "incremental": true,
+    "module": "esnext",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
     "baseUrl": "./", // Configuración para alias
     "paths": {
-      "@/*": ["src/*"] // Alias para rutas relativas
+      "@/*": ["src/*"] // Alias para `@`
     },
     "plugins": [
       {
-        "name": "next" // Habilita el plugin de Next.js
+        "name": "next"
       }
     ]
   },
   "include": [
-    "next-env.d.ts", // Incluye configuraciones específicas de Next.js
-    ".next/types/**/*.ts", // Archivos generados por Next.js
-    "**/*.ts", // Todos los archivos TypeScript
-    "**/*.tsx" // Todos los archivos TypeScript con JSX
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "**/*.ts",
+    "**/*.tsx"
   ],
   "exclude": [
-    "node_modules", // Excluye dependencias de node_modules
-    "**/*.js", // Opcional: Excluir archivos JavaScript
-    "**/*.jsx" // Opcional: Excluir archivos JSX
+    "node_modules"
   ]
 }

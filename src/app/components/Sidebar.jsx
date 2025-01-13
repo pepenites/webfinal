@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import React from 'react';
 import { useUser } from './UserContext'; // Asegúrate de que la ruta sea correcta
 
@@ -9,11 +8,10 @@ export default function Sidebar() {
 
   return (
     <div className="sidebar">
-      <Link href="/">Inicio</Link>
-      <Link href="/">Inicio</Link>
-      <Link href="/clients">Clientes</Link>
-      <Link href="/projects">Proyectos</Link>
-      <Link href="/deliverynotes">Albaranes</Link>
+      <a href="/">Inicio</a>
+      <a href="/clients">Clientes</a>
+      <a href="/projects">Proyectos</a>
+      <a href="/deliverynotes">Albaranes</a>
       {user ? (
         <div className="user-info">
           <span>Bienvenido, {user.name}</span>
@@ -22,7 +20,7 @@ export default function Sidebar() {
           </button>
         </div>
       ) : (
-        <Link href="/login">Iniciar Sesión</Link>
+        <a href="/login">Iniciar Sesión</a>
       )}
     </div>
   );
