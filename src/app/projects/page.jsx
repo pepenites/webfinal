@@ -20,6 +20,7 @@ export default function ProjectsPage() {
     clientId: "",
   });
   const [editingProject, setEditingProject] = useState(null);
+  const [searchId, setSearchId] = useState(""); // Para búsqueda por ID
 
   useEffect(() => {
     const fetchClientsAndProjects = async () => {
@@ -61,6 +62,7 @@ export default function ProjectsPage() {
     fetchClientsAndProjects();
   }, []);
 
+
   const handleAddProject = async () => {
     try {
       const token = localStorage.getItem("jwt");
@@ -68,7 +70,21 @@ export default function ProjectsPage() {
       myHeaders.append("Content-Type", "application/json");
       myHeaders.append("Authorization", `Bearer ${token}`);
 
-      const raw = JSON.stringify(newProject);
+      // const raw = JSON.stringify(newProject);
+      const raw = JSON.stringify({
+        "name": newProject.name,
+        "projectCode": newProject.projectCode,
+        "email": newProject.email,
+        "address": {
+          "street": newProject.street,
+          "number": newProject.number,
+          "postal": newProject.postal,
+          "city": newProject.city,
+          "province": newProject.province
+        },
+        "code": newProject.code,
+        "clientId": newProject.clientId
+      });
 
       const requestOptions = {
         method: "POST",
@@ -82,93 +98,157 @@ export default function ProjectsPage() {
         requestOptions
       );
 
-      if (!response.ok) throw new Error("Error al agregar el proyecto.");
+      if (!response.ok) throw new Error("Error en la respuesta API al agregar el proyecto.");
       const addedProject = await response.json();
       setProjects([...projects, addedProject]);
-      setNewProject({
-        name: "",
-        projectCode: "",
-        email: "",
-        address: {
-          street: "",
-          number: "",
-          postal: "",
-          city: "",
-          province: "",
-        },
-        code: "",
-        clientId: "",
-      });
     } catch (err) {
       console.error("Error al agregar proyecto:", err);
     }
   };
 
   const handleEditProject = async () => {
+    // Verificar si editingProject es válido
+    if (!editingProject || !editingProject._id) {
+      console.error("No hay proyecto válido seleccionado para editar.");
+      return;
+    }
+  
     try {
       const token = localStorage.getItem("jwt");
+  
+      // Verificar si el token está disponible
+      if (!token) {
+        console.error("No se encontró el token de autenticación.");
+        return;
+      }
+  
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
       myHeaders.append("Authorization", `Bearer ${token}`);
-
-      const raw = JSON.stringify(editingProject);
-
+  
+      // Crear el cuerpo de la solicitud
+      const raw = JSON.stringify({
+        name: editingProject.name || "",
+        code: editingProject.code || "",
+        projectCode: editingProject.projectCode || "",
+        email: editingProject.email || "",
+        clientId: editingProject.clientId || "",
+        address: {
+          street: editingProject.address?.street || "",
+          number: editingProject.address?.number || "",
+          postal: editingProject.address?.postal || "",
+          city: editingProject.address?.city || "",
+          province: editingProject.address?.province || "",
+        },
+        notes: editingProject.notes || "",
+      });
+  
       const requestOptions = {
         method: "PUT",
         headers: myHeaders,
         body: raw,
         redirect: "follow",
       };
-
+  
+      console.log("Enviando datos a la API:", raw);
+  
+      // Hacer la solicitud a la API
       const response = await fetch(
-        `https://bildy-rpmaya.koyeb.app/api/project/${editingProject.id}`,
+        `https://bildy-rpmaya.koyeb.app/api/project/${editingProject._id}`,
         requestOptions
       );
-
-      if (!response.ok) throw new Error("Error al editar el proyecto.");
-
+  
+      // Manejar errores HTTP
+      if (!response.ok) {
+        const errorDetails = await response.text();
+        throw new Error(
+          `Error en la respuesta de la API: ${response.status} - ${errorDetails}`
+        );
+      }
+  
+      // Procesar la respuesta de la API
       const updatedProject = await response.json();
+      console.log("Proyecto actualizado exitosamente:", updatedProject);
+  
+      // Actualizar el estado del frontend con el proyecto editado
       setProjects(
         projects.map((project) =>
-          project.id === updatedProject.id ? updatedProject : project
+          project._id === updatedProject._id ? updatedProject : project
         )
       );
-      setEditingProject(null);
-    } catch (err) {
-      console.error("Error al editar proyecto:", err);
+  
+      setEditingProject(null); // Salir del modo de edición
+    } catch (error) {
+      // Capturar y mostrar cualquier error
+      console.error("Error al editar proyecto:", error);
     }
   };
-
+  
+  
   const handleDeleteProject = async (projectId) => {
+    console.log("ID del proyecto recibido para eliminar:", projectId);
+  
+    if (!projectId) {
+      console.error("No se proporcionó un ID de proyecto válido.");
+      return;
+    }
+  
     try {
       const token = localStorage.getItem("jwt");
-      const myHeaders = new Headers();
-      if (token) {
-        myHeaders.append("Authorization", `Bearer ${token}`);
+  
+      if (!token) {
+        console.error("No se encontró el token de autenticación.");
+        return;
       }
-
+  
+      const myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${token}`);
+  
       const requestOptions = {
         method: "DELETE",
         headers: myHeaders,
         redirect: "follow",
       };
-
+  
+      console.log(`Eliminando proyecto con ID: ${projectId}`);
+  
       const response = await fetch(
         `https://bildy-rpmaya.koyeb.app/api/project/${projectId}`,
         requestOptions
       );
+  
+      if (!response.ok) {
+        const errorDetails = await response.text();
+        throw new Error(
+          `Error al eliminar el proyecto: ${response.status} - ${errorDetails}`
+        );
+      }
+  
+      console.log("Proyecto eliminado exitosamente.");
+  
+      setProjects(projects.filter((project) => project._id !== projectId));
+    } catch (error) {
+      console.error("Error al eliminar proyecto:", error);
+    }
+  };
+  
+  
+  
+  
 
-      if (!response.ok) throw new Error("Error al eliminar el proyecto.");
-
-      setProjects(projects.filter((project) => project.id !== projectId));
-    } catch (err) {
-      console.error("Error al eliminar proyecto:", err);
+  const handleSearchProject = () => {
+    const foundProject = projects.find((project) => project.id === searchId);
+    if (foundProject) {
+      alert(`Proyecto encontrado: ${foundProject.name}`);
+    } else {
+      alert("Proyecto no encontrado.");
     }
   };
 
   return (
     <div className="container">
       <h1>Gestión de Proyectos</h1>
+
       <div>
         <h2>Añadir Proyecto</h2>
         <input
@@ -266,7 +346,7 @@ export default function ProjectsPage() {
         >
           <option value="">Selecciona un Cliente</option>
           {clients.map((client) => (
-            <option key={client.id} value={client.id}>
+            <option key={client._id} value={client._id}>
               {client.name}
             </option>
           ))}
@@ -275,6 +355,7 @@ export default function ProjectsPage() {
           Guardar Proyecto
         </button>
       </div>
+
       {editingProject && (
         <div>
           <h2>Editar Proyecto</h2>
@@ -363,22 +444,26 @@ export default function ProjectsPage() {
               })
             }
           />
-          <input
-            type="text"
-            placeholder="Notas"
-            value={editingProject.notes}
-            onChange={(e) =>
-              setEditingProject({ ...editingProject, notes: e.target.value })
-            }
-          />
           <button className="button" onClick={handleEditProject}>
             Guardar Cambios
           </button>
         </div>
       )}
+
+      <div>
+        <h2>Búsqueda de Proyecto por ID</h2>
+        <input
+          type="text"
+          placeholder="ID del Proyecto"
+          value={searchId}
+          onChange={(e) => setSearchId(e.target.value)}
+        />
+        <button onClick={handleSearchProject}>Buscar</button>
+      </div>
+
       <ul>
         {projects.map((project) => (
-          <li key={project.id}>
+          <li key={project._id}>
             <span>{project.name}</span>
             <button onClick={() => setEditingProject(project)}>Editar</button>
             <button onClick={() => handleDeleteProject(project.id)}>

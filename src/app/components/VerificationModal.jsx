@@ -2,37 +2,28 @@
 
 import React, { useState } from 'react';
 
-export default function VerificationModal({ verificationToken, email, onClose }) {
-  const [code, setCode] = useState('');
-  const [error, setError] = useState(null);
+export default function ValidationModal({ verificationToken, email, onClose }) {
+  const [code, setCode] = useState(''); // Código ingresado por el usuario
+  const [error, setError] = useState(null); // Mensajes de error
 
   const handleVerify = async () => {
     try {
-      setError(null);
+      setError(null); // Limpia errores previos
 
-      // Validar si el token de verificación está disponible
-      if (!verificationToken) {
-        throw new Error('Token de verificación no encontrado. Intente iniciar sesión nuevamente.');
-      }
-
-      // Configuración de headers
       const myHeaders = new Headers();
-      myHeaders.append("Authorization", `Bearer ${verificationToken}`);
-      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append('Authorization', `Bearer ${verificationToken}`);
+      myHeaders.append('Content-Type', 'application/json');
 
-      // Datos dinámicos
       const raw = JSON.stringify({ code });
 
-      // Opciones de la solicitud
       const requestOptions = {
-        method: "PUT",
+        method: 'PUT',
         headers: myHeaders,
         body: raw,
-        redirect: "follow",
+        redirect: 'follow',
       };
 
-      // Comunicación con la API
-      const response = await fetch("https://bildy-rpmaya.koyeb.app/api/user/validation", requestOptions);
+      const response = await fetch('https://bildy-rpmaya.koyeb.app/api/user/validation', requestOptions);
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -40,10 +31,10 @@ export default function VerificationModal({ verificationToken, email, onClose })
       }
 
       alert('Cuenta verificada exitosamente. Por favor, inicia sesión.');
-      onClose();
-      window.location.href = '/login';
+      onClose(); // Cierra el modal
+      window.location.href = '/login'; // Redirige al login
     } catch (err) {
-      setError(err.message);
+      setError(err.message); // Muestra el error al usuario
     }
   };
 
