@@ -11,7 +11,7 @@ export default function Navigation() {
       <div className="nav-left">
         {user ? (
           <>
-            <span className="welcome-text">Bienvenido, {user.email}</span>
+            <span className="welcome-text">Bienvenido Usuario {user.email}</span>
             {/* Mostramos el correo del usuario autenticado */}
             <button className="logout-button" onClick={logout}>
               Cerrar Sesión

@@ -11,7 +11,7 @@ export default function Header() {
       <h1>Gestión de Albaranes</h1>
       {user ? (
         <div className="user-info">
-          <span>Bienvenido, {user.name}</span>
+          <span>Bienvenido Usuario {user.name}</span>
           <button onClick={logout}>Cerrar Sesión</button>
         </div>
       ) : (
