@@ -551,3 +551,80 @@ div button.project-button.search:hover {
   background-color: #b21f29; /* Rojo más oscuro */
   transform: translateY(-1px); /* Efecto flotante */
 }
+
+/* Contenedor de la barra de búsqueda y botón */
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Espacio entre la barra de búsqueda y el botón */
+  margin-bottom: 20px; /* Espaciado inferior */
+}
+
+/* Barra de búsqueda */
+.search-container .input-field {
+  flex: 1; /* Se expande para ocupar el espacio disponible */
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.search-container .input-field:focus {
+  border-color: #007bff; /* Color azul cuando está en foco */
+}
+
+/* Botón de búsqueda */
+.search-container .button.primary {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.search-container .button.primary:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px); /* Efecto flotante al pasar el ratón */
+}
+/* General */
+.project-list button {
+  padding: 10px 15px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  color: white; /* Asegura que el texto sea blanco */
+}
+
+/* Botón Editar */
+.project-list button.edit {
+  background-color: #007bff; /* Azul */
+}
+
+.project-list button.edit:hover {
+  background-color: #0056b3; /* Azul más oscuro */
+}
+
+/* Botón Eliminar */
+.project-list button.delete {
+  background-color: #dc3545; /* Rojo */
+}
+
+.project-list button.delete:hover {
+  background-color: #b21f29; /* Rojo más oscuro */
+}
+
+/* Botón Detalles */
+.project-list button.details {
+  background-color: #17a2b8; /* Turquesa */
+}
+
+.project-list button.details:hover {
+  background-color: #117a8b; /* Turquesa más oscuro */
+}

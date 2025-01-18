@@ -1,9 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import '../globals.css';
-
-
+import "../globals.css";
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState([]);
@@ -274,7 +272,9 @@ export default function ProjectsPage() {
             onChange={(e) =>
               setNewProject({ ...newProject, name: e.target.value })
             }
+            className="input-field"
           />
+
           <input
             type="text"
             placeholder="Código del Proyecto"
@@ -464,26 +464,35 @@ export default function ProjectsPage() {
           <button className="button" onClick={handleEditProject}>
             Guardar Cambios
           </button>
+          <button
+            className="button secondary"
+            onClick={() => setEditingProject(null)}
+          >
+            Cancelar
+          </button>
         </div>
       )}
 
-      <div>
+      <div className="search-container">
         <h2>Búsqueda de Proyecto por ID</h2>
         <input
           type="text"
           placeholder="ID del Proyecto"
           value={searchId}
           onChange={(e) => setSearchId(e.target.value)}
+          className="input-field"
         />
-        <button onClick={handleSearchProject}>Buscar</button>
+        <button className="button primary" onClick={handleSearchProject}>
+          Buscar
+        </button>
       </div>
 
-      <ul>
+      <ul className="clients-list">
         {projects.map((project) => (
           <li key={project._id}>
             <span>{project.name}</span>
-            {/* Botón Editar */}
             <button
+              className="button project-button edit"
               onClick={() =>
                 setEditingProject({
                   ...project,
@@ -499,11 +508,16 @@ export default function ProjectsPage() {
             >
               Editar
             </button>
-            {/* Botón Eliminar */}
-            <button onClick={() => handleDeleteProject(project._id)}>
+            <button
+              className="button project-button delete"
+              onClick={() => handleDeleteProject(project._id)}
+            >
               Eliminar
             </button>
-            <button onClick={() => setSelectedProject(project)}>
+            <button
+              className="button project-button details"
+              onClick={() => setSelectedProject(project)}
+            >
               Detalles
             </button>
           </li>
